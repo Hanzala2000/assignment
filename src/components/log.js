@@ -17,7 +17,7 @@ function Log() {
     } else {
       var usersData = JSON.parse(myData)
       for (var i = 0; i < usersData.length; i++) {
-        if (data.email == usersData[i].email && data.password == usersData[i].password) {
+        if (data.email === usersData[i].email && data.password === usersData[i].password) {
           alert("Login In Successfully")
           history.push('/userProfile')
           flag = true

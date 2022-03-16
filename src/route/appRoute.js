@@ -5,26 +5,27 @@ import Log from '../components/log'
 import UserProfile from '../components/userProfile'
 import Home from "../components/home";
 import Start from "../components/start";
+import {PrivateRoute,PublicRoute} from "./privateRoute";
 export default function RouterApp() {
   return (
     <Router>
       <div>
         <Switch>
-          <Route path="/" exact>
+          <PublicRoute path="/" exact>
             <Start />
-          </Route>
-          <Route path="/userProfile">
+          </PublicRoute>
+          <PrivateRoute path="/userProfile">
             <UserProfile />
-          </Route>
-          <Route path="/home">
+          </PrivateRoute>
+          <PublicRoute path="/home">
             <Home />
-          </Route>
-          <Route path="/sign">
+          </PublicRoute>
+          <PublicRoute path="/sign">
             <Sign />
-          </Route>
-          <Route path="/log">
+          </PublicRoute>
+          <PublicRoute path="/log">
             <Log />
-          </Route>
+          </PublicRoute>
         </Switch>
       </div>
     </Router>
