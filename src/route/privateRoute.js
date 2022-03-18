@@ -1,24 +1,36 @@
-import { Route, Redirect } from "react-router-dom";
 
-function PrivateRoute({ childern, ...rest }) {
-  let data = localStorage.getItem("User_Data");
-  return (
-    <Route
-      {...rest}
-      render={() => data ? (childern) : (<Redirect to="/start" />)}
-    />
-  );
+import { Route,Redirect } from "react-router-dom";
+
+
+const PrivateRoute=({ children, ...rest }) => {
+    const data = localStorage.getItem("LoginUser");
+    return(
+        <Route 
+        {...rest}
+        render={()=>data ?(children) :(<Redirect to="/"/>)
+        }
+        />
+    ) 
 }
-function PublicRoute({ childern, ...rest }) {
-  let data = localStorage.getItem("User_Data");
-  return (
-    <Route
-      {...rest}
-      render={() => !data ? (childern) : (<Redirect to="/userProfile" />)}
-    />
-  );
+
+
+
+
+
+
+const PublicRoute=({ children, ...rest }) => {
+    const data = localStorage.getItem("LoginUser");
+    return(
+        <Route 
+        {...rest}
+        render={()=>
+            !data ?(children) 
+            :
+            (
+                <Redirect to="/userProfile" />
+                )
+        }
+        />
+    ) 
 }
-export{
-  PrivateRoute,
-  PublicRoute,
-}
+export  {PrivateRoute,PublicRoute};

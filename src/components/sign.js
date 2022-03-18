@@ -4,36 +4,36 @@ import { useHistory } from 'react-router-dom'
 function Sign(prop) {
     const history = useHistory()
     let flag = false
-    const [data, saveData] = useState({
+    const [signData, saveSignData] = useState({
         email: "",
         password: "",
-        
+
     })
     let go = () => {
-        var myData = localStorage.getItem("User_Data")
-        if (!myData) {
-            
-            let num= Math.random()*100000
-            let num2 = Math.floor(num)
-            data.id = num2
+        var localSignData = localStorage.getItem("User_Data")
+        if (!localSignData) {
 
-            prop.dispatch({ type: "SET_USER_DATA", email: data.email, password: data.password ,id:data.id});
-            localStorage.setItem("User_Data", JSON.stringify([data]))
-            history.push('/home')
+            let num = Math.floor(Math.random() * 100000)
+            signData.id = num
+
+            localStorage.setItem("User_Data", JSON.stringify([signData]))
+            history.push('/log')
             alert("Signed")
         } else {
-            var usersData = JSON.parse(myData)
+            var usersData = JSON.parse(localSignData)
             for (var i = 0; i < usersData.length; i++) {
-                if (data.email == usersData[i].email) {
-                    alert("Already signed")
+                if (signData.email == usersData[i].email) {
+                    alert("Email Already Registered Please Login")
+                    history.push('/log')
                     flag = true
                 }
             }
             if (!flag) {
-                usersData.push(data)
+                let num = Math.floor(Math.random() * 100000)
+                signData.id = num
+                usersData.push(signData)
                 localStorage.setItem("User_Data", JSON.stringify(usersData))
-                prop.dispatch({ type: "SET_USER_DATA", email: data.email, password: data.password });
-                history.push('/home')
+                history.push('/log')
                 alert("Sign In Successfully")
             }
         }
@@ -41,9 +41,9 @@ function Sign(prop) {
     return (
         <div>
             <h1>Sign In</h1>
-            <input type="text" onChange={(e) => saveData({ ...data, email: e.target.value })} />
-            <input type="password" onChange={(e) => saveData({ ...data, password: e.target.value })} />
-            <button onClick={() => go()}>Go</button>
+            <input type="text" onChange={(e) => saveSignData({ ...signData, email: e.target.value })} />
+            <input type="password" onChange={(e) => saveSignData({ ...signData, password: e.target.value })} />
+            <button onClick={() => go()}>Sign Up</button>
         </div>
     );
 }
