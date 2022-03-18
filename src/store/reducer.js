@@ -11,7 +11,6 @@ function reducer(state = INITIAL_STATE, action) {
   switch (action.type) {
     case "LOG_USER_DATA":
       // console.log(action, 'action')
-      console.log(state.postData, 'state')
       return { ...state, userData: { ...state.userData, email: action.payload.email,userId:action.payload.id } }
       case "ADD_POST":
         return{...state,postData:[...state.postData,...action.payload]}
