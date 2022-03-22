@@ -89,8 +89,8 @@ function UserProfile(prop) {
                 </span>
                 <button onClick={() => logOut()}>Log Out</button>
             </div>
-            <h4>Email: {prop.email}</h4>
-            <h4>Id: {prop.id}</h4>
+            <h4 className="prop">Email: {prop.email}</h4>
+            <h4 className="prop">Id: {prop.id}</h4>
             <div className="two">
                 <Link className="twos" to="/home">Home</Link>
                 <Link className="twos" to="userProfile">Profile</Link>
@@ -111,7 +111,6 @@ function UserProfile(prop) {
                             <h4>{prop.postData[i].edit ? <><h5>Set Post Name:  </h5><input defaultValue={v.postName} onChange={(e) => setPostData({ ...postData, postName: e.target.value })} /></> : v.postName}</h4>
                             <h4>{prop.postData[i].edit ? <><h5>Set Post Detait:  </h5><input defaultValue={v.postDetail} onChange={(e) => setPostData({ ...postData, postDetail: e.target.value, })} /></> : v.postDetail}</h4>
                             <h4>{prop.postData[i].edit ? <><h5>Set Post Price:  </h5><input defaultValue={v.postPrice} onChange={(e) => setPostData({ ...postData, postPrice: e.target.value})} /><br /><button onClick={() => set()}>Set</button></> : v.postPrice}</h4>
-                            <button onClick={() => edit(i)}>Edit</button>
                             {prop.id === v.postUserId ?<div className="btns"><button>Like</button> <button>Edit</button> <button onClick={() => del(i)}>Delete</button> </div>: null}
                         </div>
                         : null

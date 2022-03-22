@@ -62,6 +62,9 @@ function Home(prop) {
             seta(false)
         }
     }
+    let like =(e)=>{
+        console.log(e)
+    }
     return (
         <div>
             <div className="one">
@@ -90,7 +93,7 @@ function Home(prop) {
                         <h4>{v.postDetail}</h4>
                         <h4>{v.postPrice}</h4>
                         <h4>{v.postUserId}</h4>
-                        {prop.id === v.postUserId ?<div className="btns"><button>Like</button> <button>Edit</button> <button onClick={() => del(i)}>Delete</button> </div>: null}
+                        <span className="btns"><button onClick={(e)=>like(e)}>Like</button></span>{prop.id === v.postUserId ?<span className="btns"> <button>Edit</button> <button onClick={() => del(i)}>Delete</button> </span>: null}
                     </div>
 
                 })
