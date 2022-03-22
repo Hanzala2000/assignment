@@ -1,5 +1,7 @@
 import React, { useState } from "react";
 import { connect } from "react-redux";
+
+import '../sign.css'
 import { useHistory } from 'react-router-dom'
 function Sign(prop) {
     const history = useHistory()
@@ -7,7 +9,7 @@ function Sign(prop) {
     const [signData, saveSignData] = useState({
         email: "",
         password: "",
-
+        signPhoto:null
     })
     let go = () => {
         var localSignData = localStorage.getItem("User_Data")
@@ -39,11 +41,12 @@ function Sign(prop) {
         }
     }
     return (
-        <div>
+        <div className="main">
             <h1>Sign In</h1>
-            <input type="text" onChange={(e) => saveSignData({ ...signData, email: e.target.value })} />
-            <input type="password" onChange={(e) => saveSignData({ ...signData, password: e.target.value })} />
-            <button onClick={() => go()}>Sign Up</button>
+            <input placeholder="Email" type="text" onChange={(e) => saveSignData({ ...signData, email: e.target.value })} />
+            <input type="password" placeholder="Password" onChange={(e) => saveSignData({ ...signData, password: e.target.value })} />
+            <input className="a" onChange={(e)=>saveSignData({...signData,signPhoto:URL.createObjectURL(e.target.files[0])})} type="file"/>
+            <button  onClick={() => go()}>Sign Up</button>
         </div>
     );
 }

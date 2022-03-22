@@ -1,22 +1,22 @@
-import React,{useEffect,useState} from "react";
-import {connect} from 'react-redux'
- function UserProfile(prop){
-     let [postData, setPostData] = useState({
+import React, { useEffect, useState } from "react";
+import {Link} from 'react-router-dom'
+import '../profile.css'
+import { connect } from 'react-redux'
+function UserProfile(prop) {
+    const[a,seta] = useState(false)
+    let [postData, setPostData] = useState({
         postName: "",
         postDetail: "",
         postImgUrl: "",
-        postPrice: ""
+        postPrice: "",
     })
-    // let a =JSON.parse(localStorage.getItem("postData"))
-    function getData() {
-                let userData = JSON.parse(localStorage.getItem('LoginUser'));
-                prop.dispatch({ type: "LOG_USER_DATA", payload: userData });
-                
-                let postData2 = JSON.parse(localStorage.getItem('postData'));
-                prop.dispatch({ type: "POST_DATA_FROM_LS", payload: postData2 })
-            }
+    
     useEffect(() => {
-        getData()
+        let userData = JSON.parse(localStorage.getItem('LoginUser'));
+        prop.dispatch({ type: "LOG_USER_DATA", payload: userData });
+
+        let postData2 = JSON.parse(localStorage.getItem('postData'));
+        prop.dispatch({ type: "POST_DATA_FROM_LS", payload: postData2 })
     }, [])
     let del = (i) => {
         let a = JSON.parse(localStorage.getItem("postData"))
@@ -24,15 +24,17 @@ import {connect} from 'react-redux'
         a.splice([i], 1)
         console.log(a);
         localStorage.setItem("postData", JSON.stringify(a))
-        getData()
+        let postData2 = JSON.parse(localStorage.getItem('postData'));
+        prop.dispatch({ type: "POST_DATA_FROM_LS", payload: postData2 })
     }
-     let logOut = () => {
+    let logOut = () => {
         localStorage.removeItem("LoginUser")
         window.location.reload()
     }
-let addPost = () => {
+    let addPost = () => {
         console.log(postData);
-        let post = { ...postData, postUserId: prop.id }
+        let post = { ...postData, postUserId: prop.id,edit:false }
+        console.log(post);
         let arr = []
 
         let oldPostData = localStorage.getItem("postData");
@@ -47,33 +49,74 @@ let addPost = () => {
             prop.dispatch({ type: "ADD_POST", payload: [post] })
         }
 
+    }
+    let edit = (i) => {
+        
+        // let a = [...prop.postData,prop.postData[i].edit=true]
+        // window.location.reload()
+        // localStorage.setItem("postData", JSON.stringify(a));
+        // let b = JSON.parse(localStorage.getItem('postData'));
+        // console.log(b);
+        
+        
+    }
+    let check =()=>{
+        if(!a){
 
+            seta(true)
+        }else{
+            seta(false)
+        }
     }
 
 
-    return(
+    let set = () => {
+        let post = { ...postData }
+        let oldPostData = localStorage.getItem("postData");
+        let oldArr = JSON.parse(oldPostData);
+        oldArr.push(post);
+        localStorage.setItem("postData", JSON.stringify(oldArr));
+        prop.dispatch({ type: "ADD_POST", payload: [post] })
+
+        
+    }
+    return (
         <div>
-            <button onClick={() => logOut()}>Log Out</button>
+             <div className="one">
+                <span>
+                    <Link to='./userProfile'><img src={prop.photo} /></Link>
+                    <Link className="b" to='./userProfile'>Profile</Link>
+                </span>
+                <button onClick={() => logOut()}>Log Out</button>
+            </div>
             <h4>Email: {prop.email}</h4>
             <h4>Id: {prop.id}</h4>
-            <input type="text" value={postData.postName} onChange={(e) => setPostData({ ...postData, postName: e.target.value })} />
-            <input type="text" value={postData.postDetail} onChange={(e) => setPostData({ ...postData, postDetail: e.target.value })} />
-            <input type="text" value={postData.postImgUrl} onChange={(e) => setPostData({ ...postData, postImgUrl: e.target.value })} />
-            <input type="text" value={postData.postPrice} onChange={(e) => setPostData({ ...postData, postPrice: e.target.value })} />
-            <button onClick={() => addPost()}>Add Post</button>
-            { 
-                prop.postData.map((v,i)=>{
-                    return <div key={i}>{prop.id === v.postUserId ?
-                    <div> <img src={v.postImgUrl}/>
-                     <h4>{v.postName}</h4>
-                        <h4>{v.postDetail}</h4>
-                        <h4>{v.postPrice}</h4>
-                        <h4>{v.postUserId}</h4>
-                        {prop.id === v.postUserId ? <button onClick={() => del(i)}>Delete</button> : null}
-                    </div>
-                    :null
+            <div className="two">
+                <Link className="twos" to="/home">Home</Link>
+                <Link className="twos" to="userProfile">Profile</Link>
+            </div>
+           <center> <button className="check" onClick={()=>check()}>Create Post</button></center>
+            {a?<div className="post"><input placeholder="Post Name" type="text" value={postData.postName} onChange={(e) => setPostData({ ...postData, postName: e.target.value })} />
+            <input  placeholder="Post Detail"type="text" value={postData.postDetail} onChange={(e) => setPostData({ ...postData, postDetail: e.target.value })} />
+            <input type="text" value={postData.postImgUrl} placeholder="Post Image URL" onChange={(e) => setPostData({ ...postData, postImgUrl: e.target.value })} />
+            <input type="text" value={postData.postPrice} placeholder="Post Price" onChange={(e) => setPostData({ ...postData, postPrice: e.target.value })} />
+            <br/><button onClick={() => addPost()}>Add Post</button></div>:null}
+
+            
+            {!localStorage.getItem("postData") ? null :
+                prop.postData.map((v, i) => {
+                    return <div  className="map" key={i}>{prop.id === v.postUserId ?
+                        <div >
+                            <h4>{prop.postData[i].edit ? <><h5>Set Image Url:  </h5><input defaultValue={v.postImgUrl} onChange={(e) => setPostData({ ...postData, postImgUrl: e.target.value })} /></> : <img src={v.postImgUrl} />}</h4>
+                            <h4>{prop.postData[i].edit ? <><h5>Set Post Name:  </h5><input defaultValue={v.postName} onChange={(e) => setPostData({ ...postData, postName: e.target.value })} /></> : v.postName}</h4>
+                            <h4>{prop.postData[i].edit ? <><h5>Set Post Detait:  </h5><input defaultValue={v.postDetail} onChange={(e) => setPostData({ ...postData, postDetail: e.target.value, })} /></> : v.postDetail}</h4>
+                            <h4>{prop.postData[i].edit ? <><h5>Set Post Price:  </h5><input defaultValue={v.postPrice} onChange={(e) => setPostData({ ...postData, postPrice: e.target.value})} /><br /><button onClick={() => set()}>Set</button></> : v.postPrice}</h4>
+                            <button onClick={() => edit(i)}>Edit</button>
+                            {prop.id === v.postUserId ?<div className="btns"><button>Like</button> <button>Edit</button> <button onClick={() => del(i)}>Delete</button> </div>: null}
+                        </div>
+                        : null
                     }
-                        
+
                     </div>
 
                 })
@@ -86,7 +129,8 @@ const mapReduxStateToProps = (state) => {
     return {
         email: state.userData.email,
         id: state.userData.userId,
-        postData: state.postData
+        postData: state.postData,
+        photo: state.userData.photo
     }
 };
 export default connect(mapReduxStateToProps)(UserProfile);
